@@ -23,7 +23,7 @@ add_definitions(-D${app})
 file(GLOB source_list "include/*.h" "src/*.cpp")
 #message(${source_list})
 
-add_executable(${app} ${source_list}) 
+add_executable(${app} ${source_list})
 
 target_include_directories(${app} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 remove_definitions(-D${app})

@@ -2,9 +2,16 @@
 
 int main()
 {
-    Matrix mat(32, 32);
+    srand(time(nullptr));
+    Matrix mat(4, 4);
     mat.print();
     std::cout << "FINISHING ... " << std::endl;
+
+    Matrix aaa(4, 4);
+    aaa.print();
+
+    Matrix product = (mat*aaa);
+    product.print();
 
 #if 0
     int row =7, col = 7;arr_size = 7;

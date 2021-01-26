@@ -9,36 +9,49 @@
 class Matrix
 {
     public:
-        Matrix(int row, int col): m_rowSize(row), m_colSize(col) {
-            srand(time(nullptr));
-            m_mat2D.resize(m_rowSize);
-            int size = m_mat2D.size();
+        Matrix(){}
+        Matrix(int row, int col): row_size(row), column_size(col) {
+
+            matrix2D.resize(row_size);
+            int size = matrix2D.size();
+
             for (int i = 0; i < size; i++)
             {
-                m_mat2D[i].resize(m_colSize);
-                for (int j = 0; j < m_colSize; ++j) {
-                    m_mat2D[i][j] = (rand() % 10);
+                matrix2D[i].resize(column_size);
+                for (int j = 0; j < column_size; ++j) {
+                    matrix2D[i][j] = (rand() % 10);
                 }
             }
             std::cout << "Created Matrix object" << std::endl;
         }
-        // operator *(Matrix &);
-        // Matrix& dotProduct();
+
+        inline int getRowSize() const {
+            return row_size;
+        }
+
+        inline int getColumnSize() const {
+            return column_size;
+        }
+
+        ~Matrix(){}
+        Matrix operator*(const Matrix&);
+        Matrix& operator=(const Matrix&);
         void print();
+        std::vector<std::vector<int>> matrix2D;
 
     private:
-        std::vector<std::vector<int>> m_mat2D;
-        int m_rowSize;
-        int m_colSize;
+        int row_size;
+        int column_size;
 };
+
 /*
-class Matrix3D
-{
-    public:
-        Matrix3D();
-        operator * (Matrix3D &);
-    private:
-        std::vector<Matrix> mat3D;
-        unsigned int depth;
-}
-*/
+   class Matrix3D
+   {
+   public:
+   Matrix3D();
+   operator * (Matrix3D &);
+   private:
+   std::vector<Matrix> mat3D;
+   unsigned int depth;
+   }
+   */

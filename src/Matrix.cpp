@@ -1,8 +1,32 @@
 #include <Matrix.h>
 
+Matrix::Matrix(int row, int col): row_size(row), column_size(col) {
+
+    matrix2D.resize(row_size);
+    int size = matrix2D.size();
+
+    for (int i = 0; i < size; i++)
+    {
+        matrix2D[i].resize(column_size);
+        for (int j = 0; j < column_size; ++j) {
+            matrix2D[i][j] = (rand() % 10);
+        }
+    }
+}
+
+Matrix::Matrix(): row_size(32), column_size(32) {
+
+    matrix2D.resize(row_size);
+    int size = matrix2D.size();
+
+    for (int i = 0; i < size; i++)
+    {
+        matrix2D[i].resize(column_size, 0);
+    }
+}
+
 void Matrix::print()
 {
-    std::cout << "Called print finction" << std::endl;
     for (int i = 0; i < row_size; ++i) {
         for (int j = 0; j < column_size; ++j) {
             std::cout << std::setw(3) << matrix2D[i][j] << " ";
@@ -11,7 +35,7 @@ void Matrix::print()
     }
 }
 
-Matrix Matrix::operator*(const Matrix& m)
+Matrix Matrix::operator*(const Matrix& m) const
 {
     if (column_size == m.getRowSize()) {
         Matrix product(row_size, m.getColumnSize());
@@ -50,21 +74,47 @@ Matrix& Matrix::operator=(const Matrix& m)
     return *this;
 }
 
-int Matrix::dotProduct()
+int Matrix::dotProduct(const Matrix& first_mat, const Matrix& second_mat)
 {
-    Matrix m, m1;
-
-    Matrix result = m * m1;
+    Matrix product = first_mat * second_mat;
     int dotProduct = 0;
-    for (int i = 0; i < result.getRowSize(); ++i) {
-        for (int j = 0; j < result.getColumnSize(); ++j) {
-            dotProduct += result.matrix2D[i][j];
+    int r_sz = product.getRowSize();
+    int c_sz = product.getColumnSize();
+    for (int i = 0; i < r_sz; ++i) {
+        for (int j = 0; j < c_sz; ++j) {
+            dotProduct += product.matrix2D[i][j];
         }
     }
     return dotProduct;
 }
 
-Matrix doCNN(const Mtarix& filter)
+int Matrix::getBlockAt(Matrix& block, int row, int col, int size)
 {
+    if ((row + size > getRowSize()) || (col + size > getColumnSize())) {
+        return -1;
+    }
+    for (int i = row; i < row + size; ++i) {
+        for (int j = col; j < col + size; ++j) {
+            block.matrix2D[i - row][j - col] = matrix2D[i][j];
+        }
+    }
 
+    return 0;
+}
+
+Matrix Matrix::doCNN(const Matrix& filter)
+{
+    int filter_size = filter.getRowSize();
+    int r_sz = getRowSize();
+    int c_sz = getColumnSize();
+    Matrix cnn_matrix((r_sz - filter_size + 1), (c_sz - filter_size + 1));
+    Matrix block(filter_size, filter_size);
+    for (int i = 0; i <= (r_sz - filter_size); ++i) {
+        for (int j = 0; j <= (c_sz - filter_size); ++j) {
+            if (getBlockAt(block, i, j, filter_size) != -1) {
+                cnn_matrix.matrix2D[i][j] = dotProduct(filter, block);
+            }
+        }
+    }
+    return cnn_matrix;
 }

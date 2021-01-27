@@ -9,22 +9,8 @@
 class Matrix
 {
     public:
-        Matrix(){}
-        Matrix(int row, int col): row_size(row), column_size(col) {
-
-            matrix2D.resize(row_size);
-            int size = matrix2D.size();
-
-            for (int i = 0; i < size; i++)
-            {
-                matrix2D[i].resize(column_size);
-                for (int j = 0; j < column_size; ++j) {
-                    matrix2D[i][j] = (rand() % 10);
-                }
-            }
-            std::cout << "Created Matrix object" << std::endl;
-        }
-
+        Matrix();
+        Matrix(int row, int col);
         inline int getRowSize() const {
             return row_size;
         }
@@ -34,9 +20,14 @@ class Matrix
         }
 
         ~Matrix(){}
-        Matrix operator*(const Matrix&);
+        Matrix operator*(const Matrix&) const;
         Matrix& operator=(const Matrix&);
+        int dotProduct(const Matrix&, const Matrix&);
         void print();
+        int getBlockAt(Matrix& block, int row, int col , int size);
+        Matrix doCNN(const Matrix& filter);
+
+    public:
         std::vector<std::vector<int>> matrix2D;
 
     private:

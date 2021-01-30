@@ -5,12 +5,16 @@
 #include <iomanip>
 #include <vector>
 #include <time.h>
+#include <json.h>
 
 class Matrix
 {
     public:
         Matrix();
         Matrix(int row, int col);
+
+        ~Matrix() = default;
+
         inline int getRowSize() const {
             return row_size;
         }
@@ -19,13 +23,13 @@ class Matrix
             return column_size;
         }
 
-        ~Matrix(){}
         Matrix operator*(const Matrix&) const;
         Matrix& operator=(const Matrix&);
-        int dotProduct(const Matrix&, const Matrix&);
-        void print();
-        int getBlockAt(Matrix& block, int row, int col , int size);
+
         Matrix doCNN(const Matrix& filter);
+        int dotProduct(const Matrix&, const Matrix&);
+        int getBlockAt(Matrix& block, int row, int col , int size);
+        void print();
 
     public:
         std::vector<std::vector<int>> matrix2D;
@@ -34,15 +38,3 @@ class Matrix
         int row_size;
         int column_size;
 };
-
-/*
-   class Matrix3D
-   {
-   public:
-   Matrix3D();
-   operator * (Matrix3D &);
-   private:
-   std::vector<Matrix> mat3D;
-   unsigned int depth;
-   }
-   */

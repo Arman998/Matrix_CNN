@@ -5,7 +5,7 @@ Matrix::Matrix(int row, int col): row_size(row), column_size(col) {
     matrix2D.resize(row_size);
     int size = matrix2D.size();
 
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size; ++i)
     {
         matrix2D[i].resize(column_size);
         for (int j = 0; j < column_size; ++j) {
@@ -18,20 +18,10 @@ Matrix::Matrix(): row_size(32), column_size(32) {
 
     matrix2D.resize(row_size);
     int size = matrix2D.size();
-
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < size; ++i)
     {
         matrix2D[i].resize(column_size, 0);
-    }
-}
 
-void Matrix::print()
-{
-    for (int i = 0; i < row_size; ++i) {
-        for (int j = 0; j < column_size; ++j) {
-            std::cout << std::setw(3) << matrix2D[i][j] << " ";
-        }
-        std::cout << std::endl;
     }
 }
 
@@ -74,6 +64,23 @@ Matrix& Matrix::operator=(const Matrix& m)
     return *this;
 }
 
+Matrix Matrix::doCNN(const Matrix& filter)
+{
+    int filter_size = filter.getRowSize();
+    int r_sz = getRowSize();
+    int c_sz = getColumnSize();
+    Matrix cnn_matrix((r_sz - filter_size + 1), (c_sz - filter_size + 1));
+    Matrix block(filter_size, filter_size);
+    for (int i = 0; i <= (r_sz - filter_size); ++i) {
+        for (int j = 0; j <= (c_sz - filter_size); ++j) {
+            if (getBlockAt(block, i, j, filter_size) != -1) {
+                cnn_matrix.matrix2D[i][j] = dotProduct(filter, block);
+            }
+        }
+    }
+    return cnn_matrix;
+}
+
 int Matrix::dotProduct(const Matrix& first_mat, const Matrix& second_mat)
 {
     Matrix product = first_mat * second_mat;
@@ -102,19 +109,12 @@ int Matrix::getBlockAt(Matrix& block, int row, int col, int size)
     return 0;
 }
 
-Matrix Matrix::doCNN(const Matrix& filter)
+void Matrix::print()
 {
-    int filter_size = filter.getRowSize();
-    int r_sz = getRowSize();
-    int c_sz = getColumnSize();
-    Matrix cnn_matrix((r_sz - filter_size + 1), (c_sz - filter_size + 1));
-    Matrix block(filter_size, filter_size);
-    for (int i = 0; i <= (r_sz - filter_size); ++i) {
-        for (int j = 0; j <= (c_sz - filter_size); ++j) {
-            if (getBlockAt(block, i, j, filter_size) != -1) {
-                cnn_matrix.matrix2D[i][j] = dotProduct(filter, block);
-            }
+    for (int i = 0; i < row_size; ++i) {
+        for (int j = 0; j < column_size; ++j) {
+            std::cout << std::setw(3) << matrix2D[i][j] << " ";
         }
+        std::cout << std::endl;
     }
-    return cnn_matrix;
 }

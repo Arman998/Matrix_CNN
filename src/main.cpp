@@ -6,7 +6,7 @@ void cnn(int matrix_idx, int kernel_idx);
 
 void outResultToFile(const std::string file_name, Json& json)
 {
-    std::ofstream json_file(file_name, std::ios::out | std::ofstream::app);
+    std::ofstream json_file(file_name, std::ios::out | std::ofstream::trunc);
     if (json_file.is_open()) {
         json_file << std::setw(4) << json;
     }

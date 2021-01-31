@@ -33,7 +33,7 @@ class FileReader
         std::vector<std::shared_ptr<Matrix>> kernels;
 
     private:
-        FileReader();
+        FileReader() {};
         static FileReader* instance;
 
 };

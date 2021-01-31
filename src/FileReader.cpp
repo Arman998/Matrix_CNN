@@ -2,8 +2,6 @@
 
 FileReader* FileReader::instance = nullptr;
 
-FileReader::FileReader() {}
-
 FileReader* FileReader::getInstance()
 {
     if (instance == nullptr) {

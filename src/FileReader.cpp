@@ -14,7 +14,6 @@ FileReader* FileReader::getInstance()
 
 bool FileReader::readJsonFile(const std::string file_name)
 {
-    std::cout<<"file_name: " << file_name;
     if (MATRICES_FILE != file_name && KERNELS_FILE != file_name) {
         std::cout << "Error: Unknown file name is specified" << std::endl;
         return false;

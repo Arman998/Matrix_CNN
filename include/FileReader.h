@@ -11,14 +11,15 @@ using Json = nlohmann::json;
 class FileReader
 {
     public:
-        FileReader(const FileReader&) = delete;
-        FileReader(FileReader&&) = delete;
-        FileReader& operator=(const FileReader&) = delete;
-        FileReader& operator=(FileReader&&) = delete;
+        FileReader(const FileReader&) = delete; // copy ctor
+        FileReader(FileReader&&) = delete;      // move ctor
+        FileReader& operator=(const FileReader&) = delete; // copy assignment
+        FileReader& operator=(FileReader&&) = delete;      // move assignment
 
         static FileReader* getInstance();
         ~FileReader() = default;
 
+        // Read json file into the json_objects
         bool readJsonFile(const std::string file_name);
         void loadMatrices();
         void loadKernels();

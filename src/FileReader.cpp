@@ -82,6 +82,39 @@ void FileReader::storeKernels()
     }
 }
 
+void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
+{
+    if (opt_mat || ! opt_krn) {
+        int idx = 0;
+        while (idx < count) {
+            std::cout << "Please enter the dimensions of matrix" << (idx + 1) << ": ";
+            int row = 0, col = 0;
+            std::cin >> row >> col;
+            assert (row > 1);
+            assert (col > 1);
+            std::shared_ptr<Matrix> mat(new Matrix(row, col));
+            matrices.push_back(mat);
+            ++idx;
+        }
+        storeMatrices();
+    }
+
+    if (opt_krn) {
+        int idx = 0;
+        while (idx < count) {
+            std::cout << "Please enter the dimensions of kernel" << (idx + 1) << ": ";
+            int row = 0, col = 0;
+            std::cin >> row >> col;
+            assert (row > 1);
+            assert (col > 1);
+            std::shared_ptr<Matrix> krn(new Matrix(row, col));
+            kernels.push_back(krn);
+            ++idx;
+        }
+        storeKernels();
+    }
+}
+
 Json FileReader::matrixToJson(std::shared_ptr<Matrix> matrix)
 {
     Json json;

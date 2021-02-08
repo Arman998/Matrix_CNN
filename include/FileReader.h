@@ -3,8 +3,8 @@
 #include <string>
 #include <memory>
 
-#define MATRICES_FILE "matrix.json"
-#define KERNELS_FILE "kernel.json"
+#define MATRICES_FILE "matrices.json"
+#define KERNELS_FILE "kernels.json"
 
 using Json = nlohmann::json;
 
@@ -25,8 +25,10 @@ class FileReader
         void loadKernels();
         void storeMatrices();
         void storeKernels();
+        void regenerateMatrices(bool opt_mat, bool opt_krn, int count);
         Json matrixToJson(std::shared_ptr<Matrix> matrix);
         std::shared_ptr<Matrix> jsonToMatrix(Json& json);
+
 
         Json json_objects;
         std::vector<std::shared_ptr<Matrix>> matrices;

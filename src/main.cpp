@@ -8,8 +8,8 @@ int main(int argc , char* argv[])
     FileReader* reader = FileReader::getInstance();
     reader->loadMatrices();
     reader->loadKernels();
-    doCNN(2, 2);
+    performConvolution(2, 2);
     std::cout << "######################################################################################################" << std::endl;
-    doCNN(1, 1);
+    performConvolution(1, 1);
     return 0;
 }

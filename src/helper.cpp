@@ -77,13 +77,20 @@ void help()
         << "\t--do_cnn <-m> value <-k> value" << std::setw(DESCRIPTION_WIDTH)
         << "Do convolution operation on matrix with id: -m matrix_id, by the kernel with id: -k kernel_id"<< std::endl
         << "\t" << std::setw(OPTIONS_WIDTH) << PERIOD << std::setw(DESCRIPTION_WIDTH)
-        << "Note: the -m and -k options with their values are mandatory options!"<< std::endl;
+        << "Note: the -m and -k options are mandatory options, and the arguments shuld be >= 1 number!"<< std::endl;
 
     std::cout << std::endl;
     std::cout << "Examples of usage:" << std::endl;
     std::cout << "\t./matrix_cnn --regenerate -K --count 5" << std::endl;
     std::cout << "\t./matrix_cnn --do_cnn -m 3 -k 2 -O /home/workspace/output.json" << std::endl;
 }
+
+inline bool exists(const char* filename)
+{
+    std::ifstream file(filename);
+    return file.good();
+}
+
 
 void handleOptions(int argc, char* argv[])
 {
@@ -96,6 +103,8 @@ void handleOptions(int argc, char* argv[])
     bool regenerate = false;
     bool opt_mat = false, opt_krn = false;
     int count = 5;
+    bool do_cnn = false;
+    int mat_idx = 0, krn_idx = 0;
 
     const char* short_options = "RMKC:O:m:k:d";
     static struct option long_options[] = {
@@ -129,13 +138,13 @@ void handleOptions(int argc, char* argv[])
                 std::cout << "_____________________________O: " << optarg << std::endl;
                 break;
             case 'm':
-                std::cout << "_____________________________m: " << optarg << std::endl;
+                mat_idx = atoi(optarg);
                 break;
             case 'k':
-                std::cout << "_____________________________k: " << optarg << std::endl;
+                krn_idx = atoi(optarg);
                 break;
             case 'd':
-                std::cout << "_____________________________d" << std::endl;
+                do_cnn = true;
                 break;
             case '?':
             default:
@@ -149,18 +158,39 @@ void handleOptions(int argc, char* argv[])
     if (regenerate) {
         reader->regenerateMatrices(opt_mat, opt_krn, count);
     }
+
+    if (do_cnn) {
+        if(mat_idx <= 0 || krn_idx <= 0) {
+            help();
+            return;
+        }
+
+        performConvolution(mat_idx - 1, krn_idx - 1);
+    }
 }
 
-void doCNN(int matrix_idx, int kernel_idx)
+void performConvolution(int matrix_idx, int kernel_idx)
 {
+    if(! exists(MATRICES_FILE)) {
+        std::cout << "Faild to load the \"" << MATRICES_FILE << "\" file: File not found!" << std::endl;
+        return;
+    }
+
+    if(! exists(KERNELS_FILE)) {
+        std::cout << "Faild to load the \"" << KERNELS_FILE << "\" file: File not found!" << std::endl;
+        return;
+    }
 
     FileReader* reader = FileReader::getInstance();
+    reader->loadMatrices();
+    reader->loadKernels();
+
     if (matrix_idx >= reader->matrices.size()) {
-        std::cout << "The provided matrix index: "<< matrix_idx <<"is not exist" << std::endl;
+        std::cout << "The provided matrix index: \""<< matrix_idx + 1<<"\" does not exist!" << std::endl;
         return;
     }
     if (matrix_idx >= reader->matrices.size()) {
-        std::cout << "The provided kernel index: "<< kernel_idx <<"is not exist" << std::endl;
+        std::cout << "The provided kernel index: \""<< kernel_idx + 1<<"\" does not exist!" << std::endl;
     }
     Matrix mat = *(reader->matrices[matrix_idx].get());
     Matrix krn = *(reader->kernels[kernel_idx].get());

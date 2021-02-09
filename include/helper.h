@@ -7,6 +7,7 @@
 #define PERIOD "  "
 
 void help();
+inline bool exists(const char * filename);
 void handleOptions(int argc, char* argv[]);
-void doCNN(int matrix_idx, int kernel_idx);
+void performConvolution(int matrix_idx, int kernel_idx);
 void storeResult(const std::string file_name, Json& json);

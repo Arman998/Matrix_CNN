@@ -105,6 +105,7 @@ void handleOptions(int argc, char* argv[])
     int count = 5;
     bool do_cnn = false;
     int mat_idx = 0, krn_idx = 0;
+    std::string filePath;
 
     const char* short_options = "RMKC:O:m:k:d";
     static struct option long_options[] = {
@@ -135,7 +136,7 @@ void handleOptions(int argc, char* argv[])
                 }
                 break;
             case 'O':
-                std::cout << "_____________________________O: " << optarg << std::endl;
+                filePath = optarg;
                 break;
             case 'm':
                 mat_idx = atoi(optarg);
@@ -160,58 +161,65 @@ void handleOptions(int argc, char* argv[])
     }
 
     if (do_cnn) {
-        if(mat_idx <= 0 || krn_idx <= 0) {
+        if(mat_idx < 1 || krn_idx < 1) {
             help();
             return;
         }
-
-        performConvolution(mat_idx - 1, krn_idx - 1);
+        performConvolution(mat_idx - 1, krn_idx - 1, filePath);
     }
 }
 
-void performConvolution(int matrix_idx, int kernel_idx)
+void performConvolution(int matrix_idx, int kernel_idx, std::string filePath)
 {
     if(! exists(MATRICES_FILE)) {
         std::cout << "Faild to load the \"" << MATRICES_FILE << "\" file: File not found!" << std::endl;
-        return;
+        exit(ERROR_FILE_NOT_EXIST);
     }
 
     if(! exists(KERNELS_FILE)) {
         std::cout << "Faild to load the \"" << KERNELS_FILE << "\" file: File not found!" << std::endl;
-        return;
+        exit(ERROR_FILE_NOT_EXIST);
     }
 
     FileReader* reader = FileReader::getInstance();
     reader->loadMatrices();
     reader->loadKernels();
 
-    if (matrix_idx >= reader->matrices.size()) {
+    assert(matrix_idx >= 0);
+    assert(kernel_idx >= 0);
+    if (matrix_idx >= reader->matricesSize()) {
         std::cout << "The provided matrix index: \""<< matrix_idx + 1<<"\" does not exist!" << std::endl;
-        return;
+        exit(ERROR_IDX_OUT_OF_SCOPE);
     }
-    if (matrix_idx >= reader->matrices.size()) {
+    if (kernel_idx >= reader->kernelsSize()) {
         std::cout << "The provided kernel index: \""<< kernel_idx + 1<<"\" does not exist!" << std::endl;
+        exit(ERROR_IDX_OUT_OF_SCOPE);
     }
-    Matrix mat = *(reader->matrices[matrix_idx].get());
-    Matrix krn = *(reader->kernels[kernel_idx].get());
+    Matrix mat = reader->getMatrixAt(matrix_idx);
+    Matrix krn = reader->getKernelAt(kernel_idx);
     Matrix cnn_mat = mat.doCNN(krn);
     cnn_mat.print();
 
-    char file_name[100];
-    std::sprintf(file_name, "result_%d_%d.json", matrix_idx, kernel_idx);
     Json j_object = reader->matrixToJson(std::make_shared<Matrix>(cnn_mat));
-    storeResult(file_name, j_object);
+    if(filePath.empty()) {
+        char name[100];
+        std::sprintf(name, "result_%d_%d.json", matrix_idx + 1, kernel_idx + 1);
+        filePath = name;
+    }
+    storeResult(filePath, j_object);
 }
 
-void storeResult(const std::string file_name, Json& json)
+
+void storeResult(const std::string filePath, Json& json)
 {
-    std::ofstream json_file(file_name, std::ios::out | std::ofstream::trunc);
+    std::ofstream json_file(filePath, std::ios::out | std::ofstream::trunc);
     if (json_file.is_open()) {
         json_file << std::setw(4) << json;
+        json_file.close();
     }
     else {
-        std::cout<<"Unable to open the file: " << file_name;
+        std::cout<<"Unable to open the file: " << filePath;
+        exit(ERROR_OPEN_FILE);
     }
-    json_file.close();
 }
 

@@ -1,5 +1,5 @@
 #include <FileReader.h>
-
+#include <assert.h>
 FileReader* FileReader::instance = nullptr;
 
 FileReader* FileReader::getInstance()
@@ -7,6 +7,7 @@ FileReader* FileReader::getInstance()
     if (instance == nullptr) {
         instance = new FileReader();
     }
+    assert(instance != nullptr);
     return instance;
 }
 
@@ -131,4 +132,24 @@ std::shared_ptr<Matrix> FileReader::jsonToMatrix(Json& json)
     std::shared_ptr<Matrix> matrix(new Matrix(row, col));
     matrix->matrix2D = json["matrix2D"].get<std::vector<std::vector<int>>>();
     return matrix;
+}
+
+const Matrix& FileReader::getMatrixAt(int index) const
+{
+    return *this->matrices[index].get();
+}
+
+const Matrix& FileReader::getKernelAt(int index) const
+{
+    return *this->kernels[index].get();
+}
+
+int FileReader::matricesSize()
+{
+    return matrices.size();
+}
+
+int FileReader::kernelsSize()
+{
+    return kernels.size();
 }

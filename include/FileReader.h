@@ -28,14 +28,16 @@ class FileReader
         void regenerateMatrices(bool opt_mat, bool opt_krn, int count);
         Json matrixToJson(std::shared_ptr<Matrix> matrix);
         std::shared_ptr<Matrix> jsonToMatrix(Json& json);
-
-
-        Json json_objects;
-        std::vector<std::shared_ptr<Matrix>> matrices;
-        std::vector<std::shared_ptr<Matrix>> kernels;
+        const Matrix& getMatrixAt(int iindex) const;
+        const Matrix& getKernelAt(int iindex) const;
+        int matricesSize();
+        int kernelsSize();
 
     private:
         FileReader() {};
         static FileReader* instance;
+        Json json_objects;
+        std::vector<std::shared_ptr<Matrix>> matrices;
+        std::vector<std::shared_ptr<Matrix>> kernels;
 
 };

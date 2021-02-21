@@ -22,6 +22,8 @@ class Matrix
         inline int getColumnSize() const {
             return column_size;
         }
+        void setMatrix2D(const std::vector<std::vector<int>>& matrix);
+        const std::vector<std::vector<int>>& getMatrix2D() const;
 
         Matrix operator*(const Matrix&) const;
         Matrix& operator=(const Matrix&);
@@ -31,10 +33,9 @@ class Matrix
         int getBlockAt(Matrix& block, int row, int col , int size);
         void print();
 
-    public:
-        std::vector<std::vector<int>> matrix2D;
 
     private:
         int row_size;
         int column_size;
+        std::vector<std::vector<int>> matrix2D;
 };

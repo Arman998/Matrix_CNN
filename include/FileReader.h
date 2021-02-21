@@ -32,6 +32,7 @@ class FileReader
         const Matrix& getKernelAt(int iindex) const;
         int matricesSize();
         int kernelsSize();
+        std::shared_ptr<Matrix> allocateMemMatrix(int row, int col);
 
     private:
         FileReader() {};

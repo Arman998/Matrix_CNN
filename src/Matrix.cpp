@@ -5,8 +5,7 @@ Matrix::Matrix(int row, int col): row_size(row), column_size(col) {
     matrix2D.resize(row_size);
     int size = matrix2D.size();
 
-    for (int i = 0; i < size; ++i)
-    {
+    for (int i = 0; i < size; ++i) {
         matrix2D[i].resize(column_size);
         for (int j = 0; j < column_size; ++j) {
             matrix2D[i][j] = (rand() % 10);
@@ -18,11 +17,22 @@ Matrix::Matrix(): row_size(32), column_size(32) {
 
     matrix2D.resize(row_size);
     int size = matrix2D.size();
-    for (int i = 0; i < size; ++i)
-    {
+    for (int i = 0; i < size; ++i) {
         matrix2D[i].resize(column_size, 0);
 
     }
+}
+
+void Matrix::setMatrix2D(const std::vector<std::vector<int>>& matrix)
+{
+    assert(this->row_size == matrix.size());
+    assert(this->column_size == matrix[0].size());
+    this->matrix2D = matrix;
+}
+
+const std::vector<std::vector<int>>& Matrix::getMatrix2D() const
+{
+    return matrix2D;
 }
 
 Matrix Matrix::operator*(const Matrix& m) const

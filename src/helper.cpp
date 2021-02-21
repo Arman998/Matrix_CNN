@@ -198,7 +198,7 @@ void performConvolution(int matrix_idx, int kernel_idx, std::string filePath)
     Matrix mat = reader->getMatrixAt(matrix_idx);
     Matrix krn = reader->getKernelAt(kernel_idx);
     Matrix cnn_mat = mat.doCNN(krn);
-    cnn_mat.print();
+    //cnn_mat.print();
 
     Json j_object = reader->matrixToJson(std::make_shared<Matrix>(cnn_mat));
     if(filePath.empty()) {
@@ -216,8 +216,7 @@ void storeResult(const std::string filePath, Json& json)
     if (json_file.is_open()) {
         json_file << std::setw(4) << json;
         json_file.close();
-    }
-    else {
+    } else {
         std::cout<<"Unable to open the file: " << filePath;
         exit(ERROR_OPEN_FILE);
     }

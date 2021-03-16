@@ -1,5 +1,11 @@
 #include <Matrix.h>
 
+/*
+ Constructor to create a matrix according
+ to the provided dimensions and fill it
+ with random numbers in the range
+ between 0-10;
+*/
 Matrix::Matrix(int row, int col): row_size(row), column_size(col) {
 
     matrix2D.resize(row_size);
@@ -13,6 +19,10 @@ Matrix::Matrix(int row, int col): row_size(row), column_size(col) {
     }
 }
 
+/*
+ default constructor to create a matrix wit
+ 32x32 dimensions filled with all zeros;
+*/
 Matrix::Matrix(): row_size(32), column_size(32) {
 
     matrix2D.resize(row_size);
@@ -23,6 +33,11 @@ Matrix::Matrix(): row_size(32), column_size(32) {
     }
 }
 
+/*
+ The function checks  the correspondence of the
+ dimensions for provided matrix and initialize
+ the internal member matrix2D of an object;
+*/
 void Matrix::setMatrix2D(const std::vector<std::vector<int>>& matrix)
 {
     assert(this->row_size == matrix.size());
@@ -35,6 +50,7 @@ const std::vector<std::vector<int>>& Matrix::getMatrix2D() const
     return matrix2D;
 }
 
+// The matrix multiplication operator is overloaded
 Matrix Matrix::operator*(const Matrix& m) const
 {
     if (column_size == m.getRowSize()) {
@@ -55,6 +71,7 @@ Matrix Matrix::operator*(const Matrix& m) const
     }
 }
 
+// Matrix attribution operator overloaded
 Matrix& Matrix::operator=(const Matrix& m)
 {
 
@@ -74,6 +91,11 @@ Matrix& Matrix::operator=(const Matrix& m)
     return *this;
 }
 
+/*
+ Perform covolution operation on the member
+ matrix with the provided kernel matrix and
+ retrun a result 2D matrix;
+*/
 Matrix Matrix::doCNN(const Matrix& filter)
 {
     int filter_size = filter.getRowSize();
@@ -91,6 +113,11 @@ Matrix Matrix::doCNN(const Matrix& filter)
     return cnn_matrix;
 }
 
+/*
+ gets the function as a parameter from two matrices,
+ multiplies the matrices and calculates the sum of
+ the multiplied elements;
+*/
 int Matrix::dotProduct(const Matrix& first_mat, const Matrix& second_mat)
 {
     Matrix product = first_mat * second_mat;
@@ -105,6 +132,12 @@ int Matrix::dotProduct(const Matrix& first_mat, const Matrix& second_mat)
     return dotProduct;
 }
 
+/*
+ The size of the matrix is checked in the function and,
+ if the next step does not exceed the size of the matrix,
+ it assigns the elements of the matrix starting from the
+ mentioned point;
+*/
 int Matrix::getBlockAt(Matrix& block, int row, int col, int size)
 {
     if ((row + size > getRowSize()) || (col + size > getColumnSize())) {

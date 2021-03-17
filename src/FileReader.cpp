@@ -23,7 +23,7 @@ bool FileReader::readJsonFile(const std::string file_name)
     }
 
     std::ifstream json_file(file_name, std::ios::in);
-    if(json_file.is_open() && !(json_file.peek() == std::ifstream::traits_type::eof())) {
+    if (json_file.is_open() && !(json_file.peek() == std::ifstream::traits_type::eof())) {
         json_objects.clear();
         json_file >> json_objects;
     }
@@ -89,7 +89,9 @@ void FileReader::storeKernels()
 
 void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
 {
+
     if (opt_mat || ! opt_krn) {
+
         int idx = 0;
         while (idx < count) {
             std::cout << "Please enter the dimensions for the matrix" << (idx + 1) << ": ";
@@ -98,7 +100,7 @@ void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
             assert (row > 1);
             assert (col > 1);
             std::shared_ptr<Matrix> mat = allocateMemMatrix(row, col);
-            assert(nullptr == mat);
+            assert(nullptr != mat);
             matrices.push_back(mat);
             ++idx;
         }
@@ -114,7 +116,7 @@ void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
             assert (row > 1);
             assert (col > 1);
             std::shared_ptr<Matrix> krn = allocateMemMatrix(row, col);
-            assert(nullptr == krn);
+            assert(nullptr != krn);
             kernels.push_back(krn);
             ++idx;
         }

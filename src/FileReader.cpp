@@ -15,6 +15,11 @@ FileReader* FileReader::getInstance()
     return instance;
 }
 
+/*
+ The function is to load the kernels or matrices from json file into the json 
+ object. The parameter file_name should specify either matrices.json or 
+ kernels.js on file.
+*/
 bool FileReader::readJsonFile(const std::string file_name)
 {
     if (MATRICES_FILE != file_name && KERNELS_FILE != file_name) {
@@ -35,6 +40,9 @@ bool FileReader::readJsonFile(const std::string file_name)
     return true;
 }
 
+/*
+ Load the matrices json data from file into the json object;
+*/
 void FileReader::loadMatrices()
 {
     if (readJsonFile(MATRICES_FILE)) {
@@ -45,6 +53,9 @@ void FileReader::loadMatrices()
     }
 }
 
+/*
+ Load the kernels json data from file into the json object;
+*/
 void FileReader::loadKernels()
 {
     if (readJsonFile(KERNELS_FILE)) {
@@ -55,6 +66,9 @@ void FileReader::loadKernels()
     }
 }
 
+/*
+ Store the generated matrices data into the json file;
+*/
 void FileReader::storeMatrices()
 {
     json_objects.clear();
@@ -71,6 +85,10 @@ void FileReader::storeMatrices()
     }
 }
 
+
+/*
+ Store the generated kernels data into the json file
+*/
 void FileReader::storeKernels()
 {
     json_objects.clear();
@@ -86,6 +104,14 @@ void FileReader::storeKernels()
         std::cout<<"Unable to open the \"" << KERNELS_FILE << "\" file" << std::endl;
     }
 }
+
+/*
+ The function will be regenerate the matrices and kernels data based on provided
+ CLI options. The option -M must be soecified to generate matrices file.The -K
+ option must be specified to generate kernels file. the both matrices and
+ kernels files will be regenerated if both of -M and -K options are specified.
+
+*/
 
 void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
 {
@@ -123,7 +149,9 @@ void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
         storeKernels();
     }
 }
-
+/*
+ The function writes the matrices to the file in Json format
+*/
 Json FileReader::matrixToJson(std::shared_ptr<Matrix> matrix)
 {
     Json json;
@@ -132,7 +160,10 @@ Json FileReader::matrixToJson(std::shared_ptr<Matrix> matrix)
     json["matrix2D"] = matrix.get()->getMatrix2D();
     return json;
 }
-
+/*
+ The function reads the matrix written in json format from the file and assigns
+ it to the matrix 
+*/
 std::shared_ptr<Matrix> FileReader::jsonToMatrix(Json& json)
 {
     int row = json["row_size"].get<int>();
@@ -161,6 +192,9 @@ int FileReader::kernelsSize()
 {
     return kernels.size();
 }
+/*
+ The function checks for memory and returns if available
+*/
 
 std::shared_ptr<Matrix> FileReader::allocateMemMatrix(int row, int col)
 {

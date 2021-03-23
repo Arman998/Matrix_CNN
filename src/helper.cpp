@@ -28,6 +28,7 @@
  * 	./matrix_cnn --regenerate -K --count 5
  * 	./matrix_cnn --do_cnn -m 3 -k 2 -O /home/workspace/output.json
 */
+
 void help()
 {
     std::cout << "USAGE: <path_to>/matrix_cnn [OPTIONS]... " << std::endl;
@@ -84,14 +85,19 @@ void help()
     std::cout << "\t./matrix_cnn --regenerate -K --count 5" << std::endl;
     std::cout << "\t./matrix_cnn --do_cnn -m 3 -k 2 -O /home/workspace/output.json" << std::endl;
 }
-
+/*
+Check whether the file with the provided file name exists or not
+*/
 inline bool exists(const char* filename)
 {
     std::ifstream file(filename);
     return file.good();
 }
 
-
+/*
+ Handle the options provided from the CLI by a user and do the
+ necessasry actions based on the options group.
+*/
 void handleOptions(int argc, char* argv[])
 {
     if (argc == 1) {
@@ -168,7 +174,13 @@ void handleOptions(int argc, char* argv[])
         performConvolution(mat_idx - 1, krn_idx - 1, filePath);
     }
 }
-
+/*
+ The function performs convolution operation on a matrix with a kernel
+ according to the provided indexes respectively.the result convolved matrix
+ will be saved to the provided file path if it provided from the CLI,
+ otherwise the default output file with an informative name will be
+ generated if the output file path is not provided by user.
+*/
 void performConvolution(int matrix_idx, int kernel_idx, std::string filePath)
 {
     if(! exists(MATRICES_FILE)) {
@@ -209,7 +221,11 @@ void performConvolution(int matrix_idx, int kernel_idx, std::string filePath)
     storeResult(filePath, j_object);
 }
 
-
+/*
+ The function stores the provided json object into the given file path.
+ The functions will be exited with the ERROR_OPEN_FILE code if theres
+ not possible to open the file.
+*/
 void storeResult(const std::string filePath, Json& json)
 {
     std::ofstream json_file(filePath, std::ios::out | std::ofstream::trunc);

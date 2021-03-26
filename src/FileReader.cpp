@@ -120,38 +120,51 @@ void FileReader::regenerateMatrices(bool opt_mat, bool opt_krn, int count)
 {
 
 		if (opt_mat || ! opt_krn) {
-
 				int idx = 0;
 				while (idx < count) {
 						std::cout << "Please enter the dimensions for the matrix" << (idx + 1) << ": ";
-						int row = 0, col = 0;
-						std::cin >> row >> col;
-						if ((row <= 1) || (col <= 1)) {
+						std::string r_s = "";
+						std::string c_s = "";
+						std::cin >> r_s >> c_s;
+
+						if ((isNumber(r_s) == true) && (isNumber(c_s) == true)) {
+								int row = stoi(r_s);	
+								int col = stoi(c_s);
+
+								std::shared_ptr<Matrix> mat = allocateMemMatrix(row, col);
+								assert(nullptr != mat);
+								matrices.push_back(mat);
+								++idx;
+
+						} else {
 								help();
 								continue;
 						}
-						std::shared_ptr<Matrix> mat = allocateMemMatrix(row, col);
-						assert(nullptr != mat);
-						matrices.push_back(mat);
-						++idx;
 				}
 				storeMatrices();
 		}
-
 		if (opt_krn) {
 				int idx = 0;
 				while (idx < count) {
 						std::cout << "Please enter the dimensions for the kernel" << (idx + 1) << ": ";
-						int row = 0, col = 0;
-						std::cin >> row >> col;
-						if ((row <= 1) || (col <= 1)) {
+						std::string r_s = "";
+						std::string c_s = "";
+						std::cin >> r_s >> c_s;
+
+
+						if ((isNumber(r_s) == true) && (isNumber(c_s) == true)) {
+								int row = stoi(r_s);	
+								int col = stoi(c_s);	
+								std::shared_ptr<Matrix> krn = allocateMemMatrix(row, col);
+								assert(nullptr != krn);
+								kernels.push_back(krn);
+								++idx;
+
+						} else {
 								help();
 								continue;
 						}
-						std::shared_ptr<Matrix> krn = allocateMemMatrix(row, col);
-						assert(nullptr != krn);
-						kernels.push_back(krn);
-						++idx;
+
 				}
 				storeKernels();
 		}

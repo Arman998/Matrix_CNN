@@ -7,6 +7,7 @@
 #define PERIOD "  "
 
 void help();
+bool isNumber(std::string num);
 inline bool exists(const char * filename);
 void handleOptions(int argc, char* argv[]);
 void performConvolution(int matrix_idx, int kernel_idx, std::string filePath = "");

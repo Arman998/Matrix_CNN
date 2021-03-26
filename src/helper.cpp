@@ -1,5 +1,6 @@
 #include <helper.h>
 #include <getopt.h>
+#include <cctype>
 
 /*
  * USAGE: <path_to>/matrix_cnn [OPTIONS]...
@@ -84,6 +85,23 @@ void help()
     std::cout << "Examples of usage:" << std::endl;
     std::cout << "\t./matrix_cnn --regenerate -K --count 5" << std::endl;
     std::cout << "\t./matrix_cnn --do_cnn -m 3 -k 2 -O /home/workspace/output.json" << std::endl;
+}
+
+bool isNumber(std::string num)
+
+{
+		bool number = true;
+		for (int i = 0; i < num.length(); ++i) {
+				if (num[i] >= '1' && num[i] <= '9' ) {
+						number = true;
+
+				} else {
+						number = false; 
+						break;
+				}
+return number;
+}
+	
 }
 /*
 Check whether the file with the provided file name exists or not

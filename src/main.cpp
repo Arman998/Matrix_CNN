@@ -2,6 +2,6 @@
 
 int main(int argc , char* argv[])
 {
-    handleOptions(argc, argv);
-    return 0;
+	handleOptions(argc, argv);
+	return 0;
 }

@@ -6,6 +6,7 @@
 #define DESCRIPTION_WIDTH 110
 #define PERIOD "  "
 
+void printRegenerateMKhelp();
 void help();
 bool isNumber(std::string num);
 inline bool exists(const char * filename);

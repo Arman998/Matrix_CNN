@@ -2,7 +2,6 @@
 #include <json.h>
 #include <string>
 #include <memory>
-
 #define MATRICES_FILE "matrices.json"
 #define KERNELS_FILE "kernels.json"
 
